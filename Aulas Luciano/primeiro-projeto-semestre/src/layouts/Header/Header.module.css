@@ -1,4 +1,6 @@
-.header-teste {
-    background-color: brown;
-    color: aqua;
+.header {
+    background-color: aqua;
+    color: #FFF;
+    padding: 20px;
+    text-align: center;
 }
