@@ -1,71 +1,128 @@
-CREATE DATABASE IF NOT EXISTS biblioteca_db;
+CREATE DATABASE IF NOT EXISTS empresa_limpeza;
 
-USE biblioteca_db;
+USE empresa_limpeza;
 
-DROP TABLE IF EXISTS livros;
-DROP TABLE IF EXISTS movimentacoes;
-
-CREATE TABLE livros(
-	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    titulo VARCHAR(150) NOT NULL,
-    categoria VARCHAR(80) NOT NULL, 
-    valor_unitario DECIMAL(10,2) NOT NULL, 
+CREATE TABLE produto_limpeza(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(150) NOT NULL,
+    tipo VARCHAR(150) NOT NULL,
+    valor_unitario DECIMAL(10,2) NOT NULL,
     estoque_minimo INT NOT NULL DEFAULT 0,
     estoque_maximo INT NOT NULL DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE movimentacoes(
+CREATE TABLE estoque(
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    livro_id INT NOT NULL,
-    tipo ENUM('ENTRADA', 'SAIDA') NOT NULL,
+    produto_limpeza_id INT NOT NULL,
+    tipo_movimentacao ENUM ('ENTRADA', 'SAIDA') NOT NULL,
     quantidade INT NOT NULL,
     data_movimentacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_movimentacoes_livros
-		FOREIGN KEY (livro_id) REFERENCES livros(id)
+    CONSTRAINT fk_produto_limpeza_estoque
+		FOREIGN KEY(produto_limpeza_id) REFERENCES produto_limpeza(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-    
 );
 
-INSERT INTO livros (titulo, categoria, valor_unitario, estoque_minimo, estoque_maximo) 
+INSERT INTO produto_limpeza
+(nome, tipo, valor_unitario, estoque_minimo, estoque_maximo)
 VALUES
-('Dom Casmurro', 'Romance', 45.00, 2, 20),
-('Capitaes da Areia', 'Literatura Brasileira', 39.90, 2, 15),
-('Clean Code', 'Tecnologia', 120.00, 1, 10);
+('Limpa Vidros Marca Bumbum de Neném', "Limpa Vidros", 16.99, 1, 40),
+('Sabonete Dove Suave', "Sabonete", 5, 6.50, 50),
+('Água Sanitária QBOA', "Água Sanitária", 10, 21.28, 30);
 
-INSERT INTO movimentacoes (livro_id, tipo, quantidade, data_movimentacao) 
+INSERT INTO estoque
+(produto_limpeza_id, tipo_movimentacao, quantidade, data_movimentacao)
 VALUES
-(1, 'ENTRADA', 10, '2026-01-03 09:00:00'),
-(1, 'SAIDA', 3, '2026-01-10 15:10:00'),
-(1, 'SAIDA', 2, '2026-01-15 11:30:00'),
-(2, 'ENTRADA', 8, '2026-01-04 10:00:00'),
-(2, 'SAIDA', 4, '2026-01-17 16:00:00'),
-(3, 'ENTRADA', 6, '2026-01-05 08:30:00'),
-(3, 'SAIDA', 1, '2026-01-20 13:15:00');
+(1, 'ENTRADA', 1, '2026-01-04 10:00:00'),
+(2, 'ENTRADA', 10, '2026-01-05 10:00:00'),
+(2, 'SAIDA', 5, '2026-01-06 12:30:00'),
+(3, 'ENTRADA', 10, '2026-01-07 10:30:00'),
+(3, 'SAIDA', 3, '2026-01-15 18:00:00');
 
-CREATE VIEW vw_livros AS 
-SELECT l.id AS livro_id,
-l.titulo,
-l.categoria,
-l.valor_unitario,
+CREATE VIEW vw_estoque AS
+SELECT nome, tipo, valor_unitario,
 SUM(
-CASE 
-	WHEN m.tipo = 'ENTRADA' THEN m.quantidade
-    WHEN m.tipo = 'SAIDA' THEN -m.quantidade
-    ELSE 0
+CASE
+	WHEN estoque.tipo_movimentacao = "ENTRADA" THEN estoque.quantidade
+    WHEN estoque.tipo_movimentacao = "SAIDA" THEN -estoque.quantidade
+	ELSE 0
 END) AS saldo_estoque,
 SUM(
 CASE 
-	WHEN m.tipo = 'ENTRADA' THEN m.quantidade
-    WHEN m.tipo = 'SAIDA' THEN -m.quantidade
+	WHEN estoque.tipo_movimentacao = "ENTRADA" THEN estoque.quantidade
+    WHEN estoque.tipo_movimentacao = "SAIDA" THEN -estoque.quantidade
+	ELSE 0
+END) * produto_limpeza.valor_unitario AS valor_total_item
+FROM produto_limpeza
+LEFT JOIN estoque
+ON produto_limpeza.id = estoque.produto_limpeza_id
+GROUP BY produto_limpeza.id,
+nome,
+tipo,
+valor_unitario;
+
+CREATE VIEW saida_produtos AS
+SELECT nome, tipo, valor_unitario, estoque.data_movimentacao
+FROM produto_limpeza
+LEFT JOIN estoque
+ON produto_limpeza.id = estoque.produto_limpeza_id
+WHERE estoque.tipo_movimentacao = "SAIDA"
+ORDER BY estoque.data_movimentacao DESC;
+
+CREATE VIEW produto_maximo_minimo AS
+SELECT nome, tipo, valor_unitario,
+SUM(
+CASE
+	WHEN estoque.tipo_movimentacao = "ENTRADA" THEN estoque.quantidade
+    WHEN estoque.tipo_movimentacao = "SAIDA" THEN -estoque.quantidade
+	ELSE 0
+END) AS saldo_estoque,
+estoque_minimo,
+estoque_maximo
+FROM produto_limpeza
+LEFT JOIN estoque
+ON produto_limpeza.id = estoque.produto_limpeza_id
+WHERE estoque.quantidade > estoque_maximo
+OR estoque.quantidade < estoque_minimo
+GROUP BY produto_limpeza.id,
+nome,
+tipo,
+valor_unitario;	
+
+SELECT nome, valor_unitario,
+sum(
+CASE 
+	WHEN estoque.tipo_movimentacao = "ENTRADA" THEN estoque.quantidade
     ELSE 0
-END) * l.valor_unitario AS valor_total_item
-FROM livros l
-LEFT JOIN movimentacoes m ON m.livro_id = l.id
-GROUP BY l.id,
-l.titulo,
-l.categoria,
-l.valor_unitario;
+END) AS qtd_total_entrada,
+sum(CASE
+	WHEN estoque.tipo_movimentacao = "SAIDA" THEN estoque.quantidade
+    ELSE 0
+END) AS qtd_total_saida,
+sum(
+CASE
+	WHEN estoque.tipo_movimentacao = "ENTRADA" THEN estoque.quantidade
+    ELSE 0
+END) * produto_limpeza.valor_unitario AS valor_total_entrada,
+sum(
+CASE
+    WHEN estoque.tipo_movimentacao = "SAIDA" THEN estoque.quantidade
+    ELSE 0
+END) * produto_limpeza.valor_unitario AS valor_total_saida,
+sum(
+CASE
+	WHEN estoque.tipo_movimentacao = "ENTRADA" THEN estoque.quantidade
+    WHEN estoque.tipo_movimentacao = "SAIDA" THEN -estoque.quantidade
+    ELSE 0
+END) * produto_limpeza.valor_unitario AS saldo_total
+FROM produto_limpeza
+LEFT JOIN estoque
+ON produto_limpeza.id = estoque.produto_limpeza_id
+AND data_movimentacao 
+BETWEEN '2026-01-04 10:00:00' AND '2026-01-15 18:00:00'
+GROUP BY produto_limpeza.id;
+
+
+
 
