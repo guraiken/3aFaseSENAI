@@ -4,29 +4,24 @@ class Queue {
         this.array = new Array()
         this.tamanho = 0
         this.inicio = 0
-        this.final = 0
     }
 
     enqueue(value) {
         if (value.isEldery) {
             let contador = this.inicio
-            while (contador < this.array.length && this.array[contador].isEldery) contador++, this.tamanho++, this.final++
-            
+            while (contador < this.array.length && this.array[contador].isEldery) contador++, this.tamanho++
             this.array.splice(contador, 0, value)
         }
         else {
             this.array.push(value)
             this.tamanho++
-            this.final++
         }
     }
 
     dequeue() {
-        if (this.tamanho === 0) return "Fila vazia"
         const removido = this.array[this.inicio]
         this.array[this.inicio] = undefined
         this.inicio = this.inicio + 1
-        this.tamanho = this.tamanho - 1
         return removido;
     }
 
@@ -55,6 +50,6 @@ fila.dequeue()
 fila.dequeue()
 fila.dequeue()
 fila.dequeue()
-fila.enqueue({nome:"Robertolos", isEldery:true})
+fila.dequeue()
 
 console.table(fila.mostrarFila())
