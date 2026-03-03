@@ -1,4 +1,5 @@
 import Card from "../../Components/Card/Card"
+import { CardApi } from "../../Components/Card/CardApi"
 import styles from "./Body.module.css"
 
 function Body() {
@@ -23,6 +24,8 @@ function Body() {
             ))}
         </div>
 
+        <h3>Usuários vindos da API:</h3>
+        <CardApi/>
     </main>
   )
 }
