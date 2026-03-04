@@ -24,6 +24,7 @@ import Card from "./Card"
 export const CardApi = () => {
 
     const [users, setUsers] = useState([])
+    const [filtro, setFiltro] = useState('')
 
     useEffect(()=> {
         fetch('https://jsonplaceholder.typicode.com/users/')
@@ -36,6 +37,14 @@ export const CardApi = () => {
 
     return (
     <>
+
+        <input 
+        type="text" 
+        className={styles.input}
+        placeholder="Filtrar por nome..."
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
+        />
         <div className={styles.cardContainerApi}>
             {
                 users.map((user) =>(
