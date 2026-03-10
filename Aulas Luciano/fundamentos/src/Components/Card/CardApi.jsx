@@ -25,19 +25,25 @@ export const CardApi = () => {
 
     const [users, setUsers] = useState([])
     const [filtro, setFiltro] = useState('')
+    const [submit, setSubmit] = useState(false)
 
     useEffect(()=> {
         fetch('https://jsonplaceholder.typicode.com/users/')
         .then(res => res.json())
+        .then((data) => {
         // .then(data => console.log(data))
-        .then(data => setUsers(data))
-
-    }, [])
+                const filtrados = data.filter((user) => (
+                user.name.toLowerCase().includes(filtro.toLowerCase())            
+                ))
+                setUsers(filtrados)
+            })
+            
+    }, [submit])
     console.log(users)
 
     return (
     <>
-
+        <form  onSubmit={(e) => {e.preventDefault(); setSubmit(!submit)}}>
         <input 
         type="text" 
         className={styles.input}
@@ -45,6 +51,8 @@ export const CardApi = () => {
         value={filtro}
         onChange={(e) => setFiltro(e.target.value)}
         />
+        <button>Pesquisar</button>
+        </form>
         <div className={styles.cardContainerApi}>
             {
                 users.map((user) =>(
