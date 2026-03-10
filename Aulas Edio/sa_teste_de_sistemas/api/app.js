@@ -12,9 +12,10 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get("/animals", getAllAnimals);
-app.post("/animals", createAnimal);
-app.delete("/animals/:id", deleteAnimal);
+app.get("/")
+// app.get("/animals", getAllAnimals);
+// app.post("/animals", createAnimal);
+// app.delete("/animals/:id", deleteAnimal);
 
 // Server
 const PORT = process.env.PORT || 3000;
