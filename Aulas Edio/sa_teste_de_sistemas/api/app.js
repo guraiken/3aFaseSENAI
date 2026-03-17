@@ -13,12 +13,12 @@ app.use(express.json());
 
 // Routes
 app.get("/")
-// app.get("/animals", getAllAnimals);
-// app.post("/animals", createAnimal);
-// app.delete("/animals/:id", deleteAnimal);
+app.get("/animals", getAllAnimals);
+app.post("/animals", createAnimal);
+app.delete("/animals/:id", deleteAnimal);
 
 // Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port http:localhost/${PORT}`);
 });
