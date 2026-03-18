@@ -1,7 +1,10 @@
 {
   "posts": [
-    { "id": "1", "title": "a title", "views": 100 },
-    { "id": "2", "title": "another title", "views": 200 }
+    { "id": "1", "title": "a title", "views": 100, "image": "https://placehold.co/600x400", "description": "Donec vitae ornare dui, non pulvinar sapien. Phasellus in scelerisque diam. Fusce dictum, orci vitae elementum laoreet, massa justo porttitor quam, eget gravida nisi nunc ut enim. Phasellus euismod blandit dictum. Quisque bibendum congue cursus. Donec molestie egestas nisi non varius. Pellentesque id blandit sapien." },
+    { "id": "2", "title": "another title", "views": 200, "image": "https://placehold.co/600x400", "description": "Donec vitae ornare dui, non pulvinar sapien. Phasellus in scelerisque diam. Fusce dictum, orci vitae elementum laoreet, massa justo porttitor quam, eget gravida nisi nunc ut enim. Phasellus euismod blandit dictum. Quisque bibendum congue cursus. Donec molestie egestas nisi non varius. Pellentesque id blandit sapien." },
+    { "id": "3", "title": "another title", "views": 50, "image": "https://placehold.co/600x400", "description": "Donec vitae ornare dui, non pulvinar sapien. Phasellus in scelerisque diam. Fusce dictum, orci vitae elementum laoreet, massa justo porttitor quam, eget gravida nisi nunc ut enim. Phasellus euismod blandit dictum. Quisque bibendum congue cursus. Donec molestie egestas nisi non varius. Pellentesque id blandit sapien." },
+    { "id": "4", "title": "another title", "views": 70, "image": "https://placehold.co/300x200", "description": "Donec vitae ornare dui, non pulvinar sapien. Phasellus in scelerisque diam. Fusce dictum, orci vitae elementum laoreet, massa justo porttitor quam, eget gravida nisi nunc ut enim. Phasellus euismod blandit dictum. Quisque bibendum congue cursus. Donec molestie egestas nisi non varius. Pellentesque id blandit sapien." },
+    { "id": "5", "title": "another title", "views": 270, "image": "https://placehold.co/300x200", "description": "Donec vitae ornare dui, non pulvinar sapien. Phasellus in scelerisque diam. Fusce dictum, orci vitae elementum laoreet, massa justo porttitor quam, eget gravida nisi nunc ut enim. Phasellus euismod blandit dictum. Quisque bibendum congue cursus. Donec molestie egestas nisi non varius. Pellentesque id blandit sapien." }
   ],
   "comments": [
     { "id": "1", "text": "a comment about post 1", "postId": "1" },

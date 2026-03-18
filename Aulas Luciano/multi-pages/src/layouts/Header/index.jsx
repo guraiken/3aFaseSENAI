@@ -12,8 +12,52 @@ export const Header = () => {
   }
 
   return (
-    <header className="bg-amber-600">
-        Header
+    <header className="flex items-center justify-between p-4 bg-gray-200">
+        <nav className="space-x-4">
+          <NavLink
+            to={'/'}
+            end
+            className={({isActive}) => 
+              isActive ? "text-blue-600 font-bold" : "text-gray-800"
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to={'/blog'}
+            end
+            className={({isActive}) => 
+              isActive ? "text-blue-600 font-bold" : "text-gray-800"
+            }
+          >
+            Blog
+          </NavLink>
+          <NavLink
+            to={'/sobre'}
+            end
+            className={({isActive}) => 
+              isActive ? "text-blue-600 font-bold" : "text-gray-800"
+            }
+          >
+            Sobre
+          </NavLink>
+        </nav>
+
+        <div>
+            {
+              user ? (
+                <>
+                  <span className="mr-4">Olá, {user.email}</span>
+                  <button onClick={handleLogout} className="bg-red-500 text-white px-3 py-1 rounded cursor-pointer hover:brightness-150">Logout</button>
+                </>
+              ) : (
+                <NavLink
+                to={"/login"}
+                className={"bg-blue-600 text-white px-3 py-1 rounded cursor-pointer hover:brightness-150"}
+                >Login</NavLink>
+              )
+            }
+        </div>
     </header>
   )
 }
