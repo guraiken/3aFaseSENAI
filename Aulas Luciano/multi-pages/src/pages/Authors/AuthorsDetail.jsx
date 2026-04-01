@@ -18,12 +18,13 @@ const AuthorsDetail = () => {
         <div className="flex justify-center">
             <div className={`flex flex-col p-4 justify-center gap-2 max-w-300`}>
             <div className="flex justify-center">
-            <img src={authors.foto} alt={authors.nome} className="max-w-150 h-auto"/>
+            <img src={authors.foto} alt={authors.nome} className="h-auto"/>
             </div>
             <div className="flex items-center gap-5 pt-5 justify-between">
                 <h1 className="text-2xl font-bold"> {authors.nome}</h1>
                 <h1 className="text-xl">Idade: {authors.idade}</h1>
             </div>
+            <h1 className="text-xl font-semibold">Especialidade: {authors.especialidade}</h1>
             <h2 className="text-lg">{authors.descricao}</h2>
             <h2 className="text-xl font-semibold">Biografia:</h2>
             <h3 className="text-lg">{authors.biografia}</h3>
