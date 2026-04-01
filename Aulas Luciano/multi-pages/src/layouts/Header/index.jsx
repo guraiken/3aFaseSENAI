@@ -23,6 +23,7 @@ export const Header = () => {
           >
             Home
           </NavLink>
+
           <NavLink
             to={'/blog'}
             end
@@ -32,6 +33,7 @@ export const Header = () => {
           >
             Blog
           </NavLink>
+
           <NavLink
             to={'/sobre'}
             end
@@ -41,6 +43,17 @@ export const Header = () => {
           >
             Sobre
           </NavLink>
+
+          <NavLink
+            to={'/autores'}
+            end
+            className={({isActive}) => 
+              isActive ? "text-blue-600 font-bold" : "text-gray-800"
+            }
+          >
+            Autores
+          </NavLink>
+
         </nav>
 
         <div>
